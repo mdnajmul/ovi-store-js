@@ -4,6 +4,7 @@ const searchField = document.getElementById('searchInput');
 const searchButton = document.getElementById('search-btn');
 const errorField = document.getElementById('error');
 
+//initially load all products
 const loadProducts = () => {
   const url = `https://fakestoreapi.com/products`;
   fetch(url)
@@ -12,6 +13,7 @@ const loadProducts = () => {
 };
 loadProducts();
 
+//products load by clicking search button
 searchButton.addEventListener('click', function(){
     
   //clear product details container
@@ -23,6 +25,7 @@ searchButton.addEventListener('click', function(){
 
   const searchInputValue = searchField.value;
 
+  //show error message
   if(searchInputValue === ''){
       errorField.innerHTML = `<h1 class="text-center mt-3 text-danger">Please write any product category name!</h1>`;
       return;
@@ -37,6 +40,7 @@ searchButton.addEventListener('click', function(){
 
 // show all product in UI 
 const showProducts = (products) => {
+  //show error message
   if(products.length === 0){
     errorField.innerHTML = `<h1 class="text-center mt-3 text-danger">No Products Found!</h1>`;
       return;
@@ -61,6 +65,8 @@ const showProducts = (products) => {
       allProductsContainer.appendChild(div);
   }
 };
+
+//add to cart button functionality
 let count = 0;
 const addToCart = (id, price) => {
   count = count + 1;
@@ -70,6 +76,7 @@ const addToCart = (id, price) => {
   document.getElementById("total-Products").innerText = count;
 };
 
+//get input value by id
 const getInputValue = (id) => {
   const element = document.getElementById(id).innerText;
   const converted = parseFloat(element);
@@ -122,7 +129,7 @@ const updateTotal = () => {
   document.getElementById("total").innerText = grandTotal.toFixed(2);
 };
 
-
+//load product details by clicking detals button
 const getProductDetails = productId => {
   const url = `https://fakestoreapi.com/products/${productId}`;
   fetch(url)
@@ -144,3 +151,9 @@ const displayProductDetails = (product) => {
   <hr>
   `;
 };
+
+//buy now button functionality
+const buyNow = () => {
+  alert('Your payment succesfully completed!');
+  location.reload();
+}
