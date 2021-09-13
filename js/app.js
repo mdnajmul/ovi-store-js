@@ -1,4 +1,8 @@
 const productDetailsContainer = document.getElementById('product-details');
+const allProductsContainer = document.getElementById('all-products');
+const searchField = document.getElementById('searchInput');
+const searchButton = document.getElementById('search-btn');
+const errorField = document.getElementById('error');
 
 const loadProducts = () => {
   const url = `https://fakestoreapi.com/products`;
@@ -8,8 +12,35 @@ const loadProducts = () => {
 };
 loadProducts();
 
+searchButton.addEventListener('click', function(){
+    
+  //clear product details container
+  productDetailsContainer.innerHTML = '';
+  //clear all products field container
+  allProductsContainer.innerHTML = '';
+  //clear error field
+  errorField.innerHTML = '';
+
+  const searchInputValue = searchField.value;
+
+  if(searchInputValue === ''){
+      errorField.innerHTML = `<h1 class="text-center mt-3 text-danger">Please write any product category name!</h1>`;
+      return;
+  }
+
+  const url = `https://fakestoreapi.com/products/category/${searchInputValue}`;
+  fetch(url)
+  .then(res => res.json()
+  .then(data => showProducts(data)))
+  .finally(() => searchField.value = '')
+});
+
 // show all product in UI 
 const showProducts = (products) => {
+  if(products.length === 0){
+    errorField.innerHTML = `<h1 class="text-center mt-3 text-danger">No Products Found!</h1>`;
+      return;
+  }
   const allProducts = products.map((pd) => pd);
   for (const product of allProducts) {
     const image = product.image;
@@ -27,7 +58,7 @@ const showProducts = (products) => {
       <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
       <button onclick="getProductDetails(${product.id})" class="btn btn-danger">Details</button></div>
       `;
-    document.getElementById("all-products").appendChild(div);
+      allProductsContainer.appendChild(div);
   }
 };
 let count = 0;
