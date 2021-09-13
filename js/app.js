@@ -1,3 +1,5 @@
+const productDetailsContainer = document.getElementById('product-details');
+
 const loadProducts = () => {
   const url = `https://fakestoreapi.com/products`;
   fetch(url)
@@ -23,7 +25,7 @@ const showProducts = (products) => {
       <p><span style="color:#00cc99"><strong>Rated By: </strong</span><span style="color:#ff00ff">${product.rating.count}</span><span style="color:#0000ff"> users</span></p>
       <h2>Price: $ ${product.price}</h2>
       <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
-      <button id="details-btn" class="btn btn-danger">Details</button></div>
+      <button onclick="getProductDetails(${product.id})" class="btn btn-danger">Details</button></div>
       `;
     document.getElementById("all-products").appendChild(div);
   }
@@ -89,3 +91,25 @@ const updateTotal = () => {
   document.getElementById("total").innerText = grandTotal.toFixed(2);
 };
 
+
+const getProductDetails = productId => {
+  const url = `https://fakestoreapi.com/products/${productId}`;
+  fetch(url)
+  .then(res => res.json())
+  .then(data => displayProductDetails(data));
+};
+
+//show product details in UI
+const displayProductDetails = (product) => {
+  productDetailsContainer.innerHTML = `
+  <hr>
+  <div class="text-center">
+    <img class="product-details-image" src=${product.image}></img>
+  </div>
+  <h1 class="text-center text-success fw-bold">${product.title}</h1>
+  <h3 class="text-center fw-bold"><span class="text-warning fw-bold">Category: </span>${product.category}</h3>
+  <h3 class="text-center fw-bold"><span class="text-info fw-bold">Price: </span>$${product.price}</h3>
+  <p class="text-center">${product.description}</p>
+  <hr>
+  `;
+};
